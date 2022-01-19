@@ -1,0 +1,156 @@
+﻿syntax = "proto3";
+package CustomersCommonData;
+
+option csharp_namespace = "Ilma.CustomersCommonData";
+option optimize_for = SPEED;
+
+enum LoanAnswer {
+	NoInfo = 0;
+	Yes = 1;
+	No = 2;
+}
+
+enum IncomeSourceType {
+	NoSourceInfo = 0;
+	Salary = 1;
+	Business = 2;
+	RelativesSponsorship = 3;
+	GovermentPayments = 4;
+	Rent = 5;
+	IrregularEarning = 6;
+	DontHave = 7;
+}
+
+enum MaritalStatus {
+	NoStatus = 0;
+	Married = 1;
+	Single = 2;
+}
+
+enum Gender {
+	NoGenderInfo = 0;
+	Female = 1;
+	Male = 2;
+}
+
+enum ContactType {
+	NoContactInfo = 0;
+	//Родители
+	Parent = 1;
+	//Брат
+	Brother = 2;
+	//Сестра
+	Sister = 3;
+	//Тетя
+	Aunt = 4;
+	//Дядя
+	Uncle = 5;
+	//Коллега
+	Colleague = 6;
+	//Сосед(ка)
+	Neighbour = 7;
+	//Знакомый/знакомая
+	Acquaintance = 8;
+	//Подруга/друг
+	Friend = 9;
+	//Супруг(а)
+	Spouse = 10;
+	//Дочь
+	Daughter = 11;
+	//Сын
+	Son = 12;
+	//'Внук/внучка',
+	Grandson = 13;
+	//'Родственник',
+	Relative = 14;
+}
+
+enum OrganizationType {
+	NoOrgType = 0;
+	//Услуги
+	Services = 1;
+	//Торговля
+	Trade = 2;
+	//Производство
+	Production = 3;
+	//Бюджет
+	Budget = 4;
+	//Частник
+	Private = 5;
+	//Здравоохранение
+	Medicine = 6;
+	//Правоохранительные органы
+	Police = 7;
+	//Образовательные
+	Education = 8;
+}
+
+enum PensionType {
+	NoPensionType = 0;
+	//Нет(Иное)
+	Other = 1;
+	//По возрасту
+	ByAge = 2;
+	//По инвалидности
+	ByDisability = 3;
+	//По выслуге лет
+	ByWork = 4;
+}
+
+enum DisabilityType {
+	NoDisabilityInfo = 0;
+	//Нет
+	NoDisability = 1;
+	//Первая группа
+	FirstGroup = 2;
+	//Вторая группа
+	SecondGroup = 3;
+}
+
+enum OtherIncomeType {
+	NoIncomeType = 0;
+	//Пособие
+	UnemploymentBenefits = 1;
+	//Неоф ЗП
+	UnofficialSalary = 2;
+	//Вторая работа
+	SecondJob = 3;
+	//Алименты
+	Alimony = 4;
+	//Другое
+	OtherType = 5;
+}
+
+enum ContactFields {
+	FirstName = 0;
+	LastName = 1;
+	Email = 2;
+	Phone = 3;
+}
+
+message CoBorrower {
+	int64 id = 1;
+	string firstName = 2;
+	string lastName = 3;
+	string middleName = 4;
+	int64 customerId = 10;
+}
+
+message CoBorrowersInfos {
+	repeated CoBorrower info = 1;
+}
+
+message ShippingInfo {
+	//Fill it if shipping only from departmant
+	int64 departmentId = 1;
+	string city = 2;
+	string address = 3;
+	string flat = 4;
+	string entrance = 5;
+	string intercomCode = 6;
+	string floor = 7;
+	string mainPhone = 8;
+	string additionalPhone = 9;
+	string comment = 10;
+	int64 requestId = 11;
+}

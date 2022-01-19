@@ -1,0 +1,81 @@
+syntax = "proto3";
+package LoanCommonData;
+
+option csharp_namespace = "Ilma.LoanService.CommonData";
+option optimize_for = SPEED;
+
+enum LoanType {
+  noInfo = 0;
+  //доверительный
+  trusted = 1;
+  //С обеспечением
+  secured = 2;
+  //Внутренний
+  inner = 3;
+  //ЗДЗ
+  zdz = 4;
+  //МК Готовое жилье
+  mkReadyHousing = 5;
+  //МКСтроительство
+  mkConstruction = 6;
+  //МК через агента
+  mkViaAgent = 7;
+}
+
+enum LoanPurpose {
+  NoPurposeInfo = 0;
+  Repairs = 1;
+  Shopping = 2;
+  Study = 3;
+  Health = 4;
+  ForCars = 5;
+  Building = 6;
+  Firewood = 7;
+  Gifts = 8;
+  Appliances = 9;
+  Credits = 10;
+  Celebration= 11;
+  Mebel = 12;
+  Clothes = 13;
+  Mortage = 14;
+}
+
+enum LoanStatus {
+  //Нет инфы
+  NoLoanInfo = 0;
+  //на рассмотрении
+  Checking = 1;
+  //нужен поручитель(или отказ по поручителю)
+  NeedNewCoBorrower = 2;
+  //отказ
+  DeniedRequest = 3;
+  //одобрено
+  GrantedRequest = 4;
+  //займ выдан и активен
+  ActiveLoan = 5;
+  //займ в просрочке
+  Overdued = 6;
+  // завершенный
+  FinishedLoan = 7;
+}
+
+enum LoanBackStatus{
+  //Нет инфы
+  New = 0;
+  //на рассмотрении
+  Processing = 1;
+  //нужен поручитель(или отказ по поручителю)
+  NeedCoBorrower = 2;
+  //отказ
+  Denied = 3;
+  //одобрено
+  Accepted = 4;
+  //займ выдан и активен
+  Shipped = 5;
+  //займ в просрочке
+  Expired = 6;
+  // завершенный
+  Finished = 7;
+  //Дожидаемся inn
+  AwaitInnToSend = 8;
+}

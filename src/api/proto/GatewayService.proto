@@ -1,0 +1,273 @@
+﻿syntax = "proto3";
+package GatewayService;
+
+option csharp_namespace = "Ilma.GatewayService";
+option optimize_for = SPEED;
+import "CustomersCommonData.proto";
+import "LoanCommonData.proto";
+import "PollData.proto";
+
+enum StatusDraw {
+	Unavailable=0;
+	Available=1;
+	Participated=2;
+}
+
+enum FileType {
+	Selfi = 0;
+	DocMain = 1;
+	DocRegistration = 2;
+}
+
+message EmptyRequest {}
+
+message GatewayOperationResult {
+	bool isSuccess = 1;
+}
+
+message ApproveCodeInfo {
+	string smsCode = 1;
+}
+
+message ApproveCodeResponse {
+	bool isSuccess = 1;
+	string token = 2;
+	string refreshToken = 3;
+}
+
+message SendCodeInfo {
+	string phoneNumber = 1;
+}
+
+message AnalyticsEvent {
+	string data = 1;
+}
+
+message Department {
+	int64 id = 1;
+	string cooperativeName = 2;
+	string cityName = 3;
+	string filteredCityName = 4;
+	string address = 5;
+	string phone = 6;
+	string innFileLink = 7;
+	string sroFileLink = 8;
+	string contractFileLink = 9;
+	string vkLink = 10;
+	string okLink = 11;
+	DepartmentSchedule schedule = 12;
+	DepartmentRequisites requisites = 13;
+}
+
+message DepartmentSchedule {
+	DepartmentScheduleDay monday = 1;
+	DepartmentScheduleDay tuesday = 2;
+	DepartmentScheduleDay wednesday = 3;
+	DepartmentScheduleDay thursday = 4;
+	DepartmentScheduleDay friday = 5;
+	DepartmentScheduleDay saturday = 6;
+	DepartmentScheduleDay sunday = 7;
+}
+
+message DepartmentScheduleDay {
+	string startTime = 1;
+	string endTime = 2;
+	bool isWeekend = 3;
+}
+
+message DepartmentRequisites {
+	string organizationName = 1;
+	string departmentName = 2;
+	string fullName = 3;
+	string shortName = 4;
+	string inn = 5;
+	string kpp = 6;
+	string ogrn = 7;
+	string ogrnAssigmentDate = 8;
+	string legalAddress = 9;
+	string person = 10;
+	string payment = 11;
+	string charterDate = 12;
+}
+
+message Departments {
+	repeated Department departments = 1;
+}
+
+message Proposal {
+	int64 id = 1;
+	int64 minAmount = 2;
+	int64 maxAmount = 3;
+	int32 minTermMonths = 4;
+	int32 maxTermMonths = 5;
+	int32 amountSliderStep = 6;
+	int32 termSliderStep = 7;
+	string title = 8;
+}  
+
+message Proposals {
+	repeated Proposal proposals = 1;
+}
+
+message RequestId {
+	int64 Id = 1;
+}
+
+message GetPhotoRequest {
+	FileType type = 1;
+	int64 coBorrowerId = 2;
+}
+
+message GatewayPhotoData {
+	bytes content = 1;
+	FileType type = 2;
+	string extension = 3;
+	int64 coborrowerId = 4;
+}
+
+message LoanDetails {
+	LoanCommonData.LoanStatus status = 1;
+	CustomersCommonData.CoBorrowersInfos coBorrowers = 2;
+	LoanRequest request = 3;
+	bool hasSelfi = 5;
+	bool hasDocMain = 6;
+	bool hasDocRegistration = 7;
+	string requisites = 8;
+	bool isNeedCollectOverdue = 9;
+}
+
+message LoanRequest {
+	int64 id = 1;
+	int32 sum = 2;
+	LoanCommonData.LoanType loanType = 3;
+	LoanCommonData.LoanPurpose purpose = 4;
+	int32 monthsCount = 5;
+	int64 officeId = 6;
+	int64 holdDate = 7;
+	float nextPaymentSum = 8;
+	int64 nextPaymentDate = 9;
+	int64 shippedDate = 10;
+}
+
+message CoborrowerLoanRequest {
+	int64 mainRequestId = 6;
+	int64 coborrowerId = 7;
+}
+
+// +++++++++++ NEW CONTRACT +++++++++++++ //
+message PollOperationResult{
+	bool isSuccess = 1;
+	int64 coBorrowerId = 2;
+}
+
+message PollValue{
+	string windowId = 1;
+	map<string, string> form = 2;
+}
+
+message PersonPollKeys{
+	int64 coBorrowerId = 1;
+	repeated string windowIds = 2;
+}
+
+message PersonPollValues{
+	int64 coBorrowerId = 1;
+	repeated PollValue dbValues = 2;
+}
+
+message PollObjectRequest{
+		PollData.PollObjectType pollObjectType = 1;
+}
+
+message InitResult{
+	PersonPollValues poll = 1;
+	string newDeviceCode = 2;
+	int64 customerId = 3;
+}
+
+// ++++++++++++++++++ TEST +++++++++++++++++++++ //
+message Get1cRequestFilter{
+	int64 requestId=1;
+}
+message Get1cResult{
+	string jsonBody = 1;
+}
+
+message TestPersonId{
+	int64 CustomerId = 1;
+	int64 CoBorrowerId = 2;
+}
+// __________________ TEST _____________________ //
+
+// -------------- NEW CONTRACT ----------------- //
+
+message ListDraws{
+	repeated Draw info =1;
+}
+
+message Draw{
+	int64 id=1;
+	int64 dateEnd=2;
+	string title=3;
+	string subtitle=4;
+	string imageUrl=5;
+	string drawResultsLink=6;
+	StatusDraw statusDraw =7;
+}
+
+message LoadedDrawes{
+	repeated int64 ids = 1;
+}
+
+message DrawId{
+	int64 id=1;
+}
+
+message FeedbackContact{
+	string phone=1;
+}
+
+service GatewayService {
+	// +++++++++++ NEW CONTRACT +++++++++++++ //
+	rpc GetInit(EmptyRequest) returns (InitResult){}
+
+	rpc Init(EmptyRequest) returns (InitResult){} // Don't use in version > version: 1.0.6+24
+
+	rpc Add(PersonPollValues) returns (PollOperationResult){}
+	
+	rpc Get(PersonPollKeys) returns (PersonPollValues){}
+	rpc GetPollConfig(PollObjectRequest) returns (PollData.PollObject){}
+	
+	rpc Delete(PersonPollKeys) returns (PollOperationResult){}
+
+	// -------------- NEW CONTRACT ----------------- //
+
+	// ++++++++++++++++++ TEST +++++++++++++++++++++ //
+	rpc TestSaveCash(TestPersonId) returns (PollOperationResult){}
+	rpc TestNewRequest(Get1cRequestFilter) returns (Get1cResult){};
+	rpc TestPingIndexedStorage(EmptyRequest) returns (Get1cResult){};
+
+	rpc ResendRequest(RequestId) returns (GatewayOperationResult) {}
+	rpc ResendCoBorrowerRequest(RequestId) returns (GatewayOperationResult) {}
+	// __________________ TEST _____________________ //
+
+	rpc SendEvent(AnalyticsEvent) returns (GatewayOperationResult) {}
+	
+	rpc SendCode(SendCodeInfo) returns (GatewayOperationResult) {}
+	rpc ApproveCode(ApproveCodeInfo) returns (ApproveCodeResponse) {}
+
+	rpc GetLoanDetails(EmptyRequest) returns (LoanDetails) {}
+	rpc GetPhoto(GetPhotoRequest) returns (GatewayPhotoData) {}
+
+	rpc GetDepartments(EmptyRequest) returns (Departments) {}
+	rpc GetProposals(EmptyRequest) returns (Proposals) {}
+	rpc AddShippingInfo(CustomersCommonData.ShippingInfo) returns (GatewayOperationResult) {}
+	
+	rpc SendLoanRequest(LoanRequest) returns (GatewayOperationResult) {}
+	rpc SendLoanCoborrowerRequest(CoborrowerLoanRequest) returns (GatewayOperationResult) {}
+	
+	rpc GetDraws(LoadedDrawes) returns (ListDraws){}
+	rpc ParticipateDraw(DrawId) returns (GatewayOperationResult){}
+
+	rpc SendFeedbackContact(FeedbackContact) returns (GatewayOperationResult){}
+}
